@@ -1,10 +1,12 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
+use App\Http\Controllers\ArticleController;
 
-Route::view('/', 'homepage');
-Route::view('/about', 'about');
+Route::get('/', [ArticleController::class, 'index']);
+Route::get('/about', function () {
+    return inertia('Aboutpage');
+});
 Route::view('/articles/{id}', 'articles');
 Route::get('/test', function () {
     return 'Hello, Laravel is working!';
