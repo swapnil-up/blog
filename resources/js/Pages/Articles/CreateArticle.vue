@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from "vue";
 import { Inertia } from "@inertiajs/inertia";
+import { Link } from "@inertiajs/vue3";
 
 const title = ref("");
 const content = ref("");
@@ -10,6 +11,10 @@ const createArticle = () => {
         title: title.value,
         content: content.value,
     });
+};
+
+const goBack = () => {
+    Inertia.visit("/");
 };
 </script>
 
@@ -22,6 +27,7 @@ const createArticle = () => {
         <input placeholder="content" v-model="content" required />
         <button type="submit">Create article</button>
     </form>
+    <button @click="goBack">Cancel</button>
 </template>
 
 <style scoped>

@@ -6,10 +6,6 @@ const props = defineProps({
     articles: Array,
 });
 
-const navigateToArticle = (id) => {
-    Inertia.visit(`/articles/${id}`);
-};
-
 const deleteArticle = (id) => {
     Inertia.delete(`/articles/${id}`);
 };
@@ -26,10 +22,14 @@ const deleteArticle = (id) => {
             <Link @click.prevent="deleteArticle(article.id)">Delete</Link>
         </li>
     </ul>
+    <Link :href="`/articles/create`">write another article?</Link>
 </template>
 
 <style lang="css" scoped>
 li {
     list-style-type: none;
+    display: flex;
+    gap: 5px;
+    padding-top: 10px;
 }
 </style>
