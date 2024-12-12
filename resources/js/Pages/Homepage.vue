@@ -9,9 +9,14 @@ const props = defineProps({
 const deleteArticle = (id) => {
     Inertia.delete(`/articles/${id}`);
 };
+
+const logout = () => {
+    Inertia.post(`/logout`);
+};
 </script>
 
 <template>
+    <button @click="logout">logout</button>
     <p>Here's what I've written:</p>
     <ul>
         <li v-for="article in articles" :key="article.id">

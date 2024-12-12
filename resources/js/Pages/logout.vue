@@ -1,0 +1,1 @@
+<template>logged out</template>
