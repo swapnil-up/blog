@@ -21,11 +21,28 @@ class ArticleController extends Controller
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'content' => 'required|string',
+            'tags' => 'array|exists:tags,id'
         ]);
 
-        Article::create($validated);
+        $article = Article::create([
+            'title' => $validated['title'],
+            'content' => $validated['content'],
+        ]);
+
+        if (!empty($validated['tags'])) {
+            $article->tag()->attach($validated['tags']);
+        }
 
         return redirect('/');
+    }
+
+    public  function show($id)
+    {
+
+        $article = Article::with('tag')->find($id);
+        return inertia('Articles/ShowArticle', [
+            'article' => $article
+        ]);
     }
 
     public function edit($id)
