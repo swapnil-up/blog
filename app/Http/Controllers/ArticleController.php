@@ -19,15 +19,25 @@ class ArticleController extends Controller
 
     public function store(Request $request)
     {
+        $request->merge([
+            'tags' => is_string($request->tags) ? json_decode($request->tags, true) : $request->tags,
+        ]);
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'content' => 'required|string',
-            'tags' => 'array|exists:tags,id'
+            'tags' => 'array|exists:tags,id',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png,gif,svg|max:2048',
         ]);
+
+        if ($request->hasFile('image')) {
+            $filepath = $request->file('image')->store('articles', 'public');
+            $validated['image_path'] = $filepath;
+        }
 
         $article = Article::create([
             'title' => $validated['title'],
             'content' => $validated['content'],
+            'image_path' => $validated['image_path'] ?? null,
         ]);
 
         if (!empty($validated['tags'])) {

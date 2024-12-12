@@ -28,6 +28,9 @@ const toggleComments = async () => {
                 <p>{{ tag.name }}</p>
             </li>
         </div>
+        <div v-if="article.image_path">
+            <img :src="`/storage/` + article.image_path" />
+        </div>
         <div>
             <button @click="toggleComments">Show Comments</button>
             <div v-if="showComments">
@@ -40,4 +43,9 @@ const toggleComments = async () => {
     </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+img {
+    height: 60%;
+    width: 60%;
+}
+</style>

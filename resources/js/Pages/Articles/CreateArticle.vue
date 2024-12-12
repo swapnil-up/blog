@@ -9,21 +9,44 @@ const content = ref("");
 const selectedTags = ref([]);
 const tags = ref([]);
 
+const image = ref(null);
+
 onMounted(async () => {
     const response = await axios.get("/api/tags");
     tags.value = response.data;
 });
 
 const createArticle = () => {
-    Inertia.post("/articles", {
-        title: title.value,
-        content: content.value,
-        tags: selectedTags.value,
+    // Inertia.post("/articles", {
+    //     title: title.value,
+    //     content: content.value,
+    //     tags: selectedTags.value,
+    // });
+    const formData = new FormData();
+    formData.append("title", title.value);
+    formData.append("content", content.value);
+    formData.append("tags", JSON.stringify(selectedTags.value));
+
+    console.log(image.value);
+    if (image.value) {
+        formData.append("image", image.value);
+    }
+    Inertia.post("/articles", formData, {
+        headers: {
+            "Content-Type": "multipart/form-data",
+        },
     });
 };
 
 const goBack = () => {
     Inertia.visit("/");
+};
+
+const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+        image.value = file;
+    }
 };
 </script>
 
@@ -40,6 +63,9 @@ const goBack = () => {
                 {{ tag.name }}
             </option>
         </select>
+
+        <label for="Image">Image?</label>
+        <input type="file" @change="handleFileChange" />
         <button type="submit">Create article</button>
     </form>
     <button @click="goBack">Cancel</button>

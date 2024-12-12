@@ -18,12 +18,6 @@ const logout = () => {
 <template>
     <button @click="logout">logout</button>
     <p>Here's what I've written:</p>
-
-    <router-link to="/about">go to about</router-link>
-    <router-link to="/welcome">go to welcome</router-link>
-    <br/>
-    <router-view></router-view>
-
     <ul>
         <li v-for="article in articles" :key="article.id">
             <Link :href="`/articles/${article.id}`">
