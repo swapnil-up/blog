@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Article;
+use App\Models\Comment;
 use Illuminate\Http\Request;
 
 class ArticleController extends Controller
@@ -43,6 +44,13 @@ class ArticleController extends Controller
         return inertia('Articles/ShowArticle', [
             'article' => $article
         ]);
+    }
+
+    public function getComments($id)
+    {
+        $comments = Comment::where('article_id', $id)->get();
+
+        return response()->json($comments);
     }
 
     public function edit($id)

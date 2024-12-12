@@ -1,10 +1,21 @@
 <script setup>
+import { ref } from "vue";
+
 const prop = defineProps({
     article: Object,
 });
 
-console.log("Article: ", prop.article);
-console.log("Tags: ", prop.article.tag);
+const showComments = ref(false);
+const comments = ref([]);
+
+const toggleComments = async () => {
+    if (!showComments.value) {
+        const response = await axios.get(`${prop.article.id}/comments`);
+        comments.value = response.data;
+        console.log(comments.value);
+    }
+    showComments.value = !showComments.value;
+};
 </script>
 
 <template>
@@ -16,6 +27,14 @@ console.log("Tags: ", prop.article.tag);
             <li v-for="tag in article.tag" :key="tag.id">
                 <p>{{ tag.name }}</p>
             </li>
+        </div>
+        <div>
+            <button @click="toggleComments">Show Comments</button>
+            <div v-if="showComments">
+                <li v-for="comment in comments" :key="comment.id">
+                    <p>{{ comment.content }}</p>
+                </li>
+            </div>
         </div>
         <a href="/">Back to Articles</a>
     </div>

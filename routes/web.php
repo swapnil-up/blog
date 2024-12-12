@@ -28,6 +28,8 @@ Route::middleware('auth')->group(function () {
     Route::delete('/articles/{id}', [ArticleController::class, 'delete']);
 
     Route::get('/articles/{id}', [ArticleController::class, 'show']);
+
+    Route::get('/articles/{id}/comments', [ArticleController::class, 'getComments']);
 });
 
 //api routes
@@ -47,4 +49,9 @@ Route::get('/test', function () {
 });
 Route::get('/testing', function () {
     return inertia('Welcome');
+});
+
+//404 route
+Route::fallback(function () {
+    return inertia('notfound');
 });
