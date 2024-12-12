@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Article;
 use App\Models\Comment;
+use App\Models\Image;
 use Illuminate\Http\Request;
 
 class ArticleController extends Controller
@@ -26,19 +27,27 @@ class ArticleController extends Controller
             'title' => 'required|string|max:255',
             'content' => 'required|string',
             'tags' => 'array|exists:tags,id',
-            'image' => 'nullable|image|mimes:jpg,jpeg,png,gif,svg|max:2048',
+            'images' => 'array|nullable',
+            'images.*' => 'image|mimes:jpg,jpeg,png,gif,svg|max:2048',
         ]);
 
-        if ($request->hasFile('image')) {
-            $filepath = $request->file('image')->store('articles', 'public');
-            $validated['image_path'] = $filepath;
-        }
+        // if ($request->hasFile('image')) {
+        //     $filepath = $request->file('image')->store('articles', 'public');
+        //     $validated['image_path'] = $filepath;
+        // }
 
         $article = Article::create([
             'title' => $validated['title'],
             'content' => $validated['content'],
-            'image_path' => $validated['image_path'] ?? null,
         ]);
+
+        if ($request->hasFile('images')) {
+            foreach ($request->file('images') as $image) {
+                $imagePath = $image->store('articles', 'public');
+                $article->image()->create(['file_path' => $imagePath]);
+            }
+        }
+
 
         if (!empty($validated['tags'])) {
             $article->tag()->attach($validated['tags']);
@@ -50,7 +59,7 @@ class ArticleController extends Controller
     public  function show($id)
     {
 
-        $article = Article::with('tag')->find($id);
+        $article = Article::with('image', 'tag')->find($id);
         return inertia('Articles/ShowArticle', [
             'article' => $article
         ]);

@@ -9,7 +9,7 @@ const content = ref("");
 const selectedTags = ref([]);
 const tags = ref([]);
 
-const image = ref(null);
+const images = ref(null);
 
 onMounted(async () => {
     const response = await axios.get("/api/tags");
@@ -17,19 +17,16 @@ onMounted(async () => {
 });
 
 const createArticle = () => {
-    // Inertia.post("/articles", {
-    //     title: title.value,
-    //     content: content.value,
-    //     tags: selectedTags.value,
-    // });
     const formData = new FormData();
     formData.append("title", title.value);
     formData.append("content", content.value);
     formData.append("tags", JSON.stringify(selectedTags.value));
 
-    console.log(image.value);
-    if (image.value) {
-        formData.append("image", image.value);
+    console.log(images.value);
+    if (images.value) {
+        images.value.forEach((image) => {
+            formData.append("images[]", image);
+        });
     }
     Inertia.post("/articles", formData, {
         headers: {
@@ -43,10 +40,7 @@ const goBack = () => {
 };
 
 const handleFileChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-        image.value = file;
-    }
+    images.value = Array.from(event.target.files);
 };
 </script>
 
@@ -65,7 +59,13 @@ const handleFileChange = (event) => {
         </select>
 
         <label for="Image">Image?</label>
-        <input type="file" @change="handleFileChange" />
+        <input
+            type="file"
+            @change="handleFileChange"
+            id="images"
+            multiple
+            accept="image/*"
+        />
         <button type="submit">Create article</button>
     </form>
     <button @click="goBack">Cancel</button>

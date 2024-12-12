@@ -28,8 +28,10 @@ const toggleComments = async () => {
                 <p>{{ tag.name }}</p>
             </li>
         </div>
-        <div v-if="article.image_path">
-            <img :src="`/storage/` + article.image_path" />
+        <div v-if="article.image.length">
+            <div v-for="(image, index) in article.image" :key="index">
+                <img :src="`/storage/` + image.file_path" />
+            </div>
         </div>
         <div>
             <button @click="toggleComments">Show Comments</button>
