@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\NotesController;
 use App\Models\Article;
 use App\Models\Tags;
 
@@ -37,6 +38,8 @@ Route::get('/api/tags', function () {
     return Tags::all();
 });
 
+Route::get('api/notes', [NotesController::class, 'index']);
+Route::post('api/notes', [NotesController::class, 'store']);
 
 // auth routes
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
