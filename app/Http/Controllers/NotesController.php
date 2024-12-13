@@ -52,4 +52,18 @@ class NotesController extends Controller
         return
             response()->json(['message' => 'deleted successfully'], 200);
     }
+
+    public function update(Request $request, $id)
+    {
+        $note = Note::find($id);
+        if (!$note) {
+            return response()->json(['message' => 'note not found'], 404);
+        }
+        $validatedData = $request->validate([
+            'title' => 'required|string|max:255',
+            'content' => 'nullable|string',
+        ]);
+        $note->update($validatedData);
+        return response()->json(['message' => 'updated'], 200);
+    }
 }

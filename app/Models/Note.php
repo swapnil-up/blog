@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Note extends Model
 {
@@ -12,4 +13,7 @@ class Note extends Model
         'tags' => 'array',
         'additional_properties' => 'array',
     ];
+
+    use SoftDeletes;
+    protected $dates=['deleted_at'];
 }
