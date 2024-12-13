@@ -40,4 +40,16 @@ class NotesController extends Controller
         ]);
         return response()->json($note, 201);
     }
+
+    public function destroy($id)
+    {
+        $note = Note::find($id);
+        if (!$note) {
+            return response()->json(['message' => 'note not found'], 404);
+        }
+        $note->delete();
+
+        return
+            response()->json(['message' => 'deleted successfully'], 200);
+    }
 }

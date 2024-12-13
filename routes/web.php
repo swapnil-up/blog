@@ -40,6 +40,7 @@ Route::get('/api/tags', function () {
 
 Route::get('api/notes', [NotesController::class, 'index']);
 Route::post('api/notes', [NotesController::class, 'store']);
+Route::delete('api/notes/{id}', [NotesController::class, 'destroy']);
 
 // auth routes
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
