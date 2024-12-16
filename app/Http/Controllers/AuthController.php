@@ -4,12 +4,19 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
     public function showLoginForm()
     {
         return inertia('LoginPage');
+    }
+
+    public function showRegisterForm()
+    {
+        return inertia('RegisterPage');
     }
 
     public function logout(Request $request)
@@ -36,5 +43,28 @@ class AuthController extends Controller
         return back()->withErrors([
             'email' => 'The credentials do not match'
         ])->onlyInput('email');
+    }
+
+    public function register(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|min:6|string',
+        ]);
+        // dd($request->all());
+
+        try {
+            $user = User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+            ]);
+
+            // Auth::login($user);
+            return redirect()->route('home');
+        } catch (\Exception $e) {
+            dd($e->getMessage());
+        }
     }
 }

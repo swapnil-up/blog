@@ -1,5 +1,6 @@
 <script setup>
 import { Inertia } from "@inertiajs/inertia";
+import { Link } from "@inertiajs/vue3";
 import { ref } from "vue";
 
 const email = ref("");
@@ -22,4 +23,5 @@ function tryLogin() {
         <input placeholder="enter password" v-model="password" required />
         <button type="submit">Login</button>
     </form>
+    <Link :href="`/register`">Don't have an account? Register here</Link>
 </template>

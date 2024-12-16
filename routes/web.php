@@ -48,6 +48,9 @@ Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/logout', [AuthController::class, 'logout']);
 Route::post('/login', [AuthController::class, 'login']);
 
+Route::get('/register', [AuthController::class, 'showRegisterForm']);
+Route::post('/register', [AuthController::class, 'register']);
+
 //testing 
 Route::get('/test', function () {
     return 'Hello, Laravel is working!';
