@@ -5,7 +5,6 @@ use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\NotesController;
 use App\Models\Article;
-use App\Models\Tags;
 
 Route::middleware('auth')->group(function () {
     //articles related
@@ -34,27 +33,25 @@ Route::middleware('auth')->group(function () {
 });
 
 //api routes
-Route::get('/api/tags', function () {
-    return Tags::all();
-});
 
-Route::get('api/notes', [NotesController::class, 'index']);
-Route::post('api/notes', [NotesController::class, 'store']);
-Route::delete('api/notes/{id}', [NotesController::class, 'destroy']);
-Route::patch('api/notes/{id}', [NotesController::class, 'update']);
+// Route::options('/{any}', function () {
+//     return response('', 200)
+//         ->header('Access-Control-Allow-Origin', 'http://localhost:5173')
+//         ->header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE')
+//         ->header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+// })->where('any', '.*');
+
 
 // auth routes
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
-Route::post('/logout', [AuthController::class, 'logout']);
-Route::post('/login', [AuthController::class, 'login']);
 
 Route::get('/register', [AuthController::class, 'showRegisterForm']);
 Route::post('/register', [AuthController::class, 'register']);
 
 //testing 
-Route::get('/test', function () {
-    return 'Hello, Laravel is working!';
-});
+// Route::get('/test', function () {
+//     return 'Hello, Laravel is working!';
+// });
 Route::get('/testing', function () {
     return inertia('Welcome');
 });

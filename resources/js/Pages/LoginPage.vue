@@ -7,7 +7,7 @@ const email = ref("");
 const password = ref("");
 
 function tryLogin() {
-    Inertia.post("/login", {
+    Inertia.post("api/login", {
         email: email.value,
         password: password.value,
     });
