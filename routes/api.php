@@ -19,13 +19,15 @@ Route::get('/test', function () {
 Route::middleware('web')->group(function () {
     Route::post('/login', [AuthController::class, 'login']);
 });
-Route::post('/logout', [AuthController::class, 'logout']);
+Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logout']);
 
+Route::post('/register', [AuthController::class, 'register']);
 
+// middleware('auth:sanctum')->
 Route::get('/notes', [NotesController::class, 'index']);
-Route::post('/notes', [NotesController::class, 'store']);
-Route::delete('/notes/{id}', [NotesController::class, 'destroy']);
-Route::patch('/notes/{id}', [NotesController::class, 'update']);
+Route::middleware('auth:sanctum')->post('/notes', [NotesController::class, 'store']);
+Route::middleware('auth:sanctum')->delete('/notes/{id}', [NotesController::class, 'destroy']);
+Route::middleware('auth:sanctum')->patch('/notes/{id}', [NotesController::class, 'update']);
 
 Route::get('/api/tags', function () {
     return Tags::all();

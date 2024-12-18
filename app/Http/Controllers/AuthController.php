@@ -21,13 +21,20 @@ class AuthController extends Controller
 
     public function logout(Request $request)
     {
-        Auth::logout();
-        // $request->session()->invalidate();
-        // $request->session()->regenerateToken();
+        if ($request->user()) {
+
+            $request->user()->currentAccessToken()->delete();
+
+            return response()->json([
+                'message' => 'Logout successful',
+            ], 200);
+        }
+
         return response()->json([
-            'message' => 'Logout successful',
-        ]);
+            'message' => 'Already logged out or invalid token',
+        ], 400);
     }
+
 
     public function login(Request $request)
     {
@@ -38,10 +45,13 @@ class AuthController extends Controller
 
         if (Auth::attempt($request->only('email', 'password'))) {
             $request->session()->regenerate();
+            $user = Auth::user();
+            $token = $user->createToken('google')->plainTextToken;
 
             return response()->json([
                 'message' => 'Login successful',
-                'user' => Auth::user(),
+                'token' => $token,
+                'user' => $user,
             ], 200);
         }
 
@@ -66,8 +76,12 @@ class AuthController extends Controller
                 'password' => Hash::make($request->password),
             ]);
 
-            // Auth::login($user);
-            return redirect()->route('home');
+            Auth::login($user);
+            // return redirect()->route('home');
+            return response()->json([
+                'message' => 'Registration successful',
+                'user' => Auth::user(),
+            ], 200);
         } catch (\Exception $e) {
             dd($e->getMessage());
         }
